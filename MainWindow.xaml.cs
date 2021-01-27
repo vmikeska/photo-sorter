@@ -145,10 +145,31 @@ namespace photo_sorter
 
                 var anyDirectionThresholdReached = (Math.Abs(xDiff) > Sensitivity) | (Math.Abs(yDiff) > Sensitivity);
 
-                var xLeftReached = xDiff < -Sensitivity;
+                var xLeftReached = xDiff < Sensitivity;
                 if (xLeftReached)
                 {
                     direction = "LEFT";
+                    AlreadySwiped = true;
+                }
+
+                var xRightReached = xDiff > Sensitivity;
+                if (xRightReached)
+                {
+                    direction = "RIGHT";
+                    AlreadySwiped = true;
+                }
+
+                var yTopReached = yDiff < Sensitivity;
+                if (yTopReached)
+                {
+                    direction = "TOP";
+                    AlreadySwiped = true;
+                }
+
+                var yBottomReached = yDiff > Sensitivity;
+                if (yBottomReached)
+                {
+                    direction = "BOTTOM";
                     AlreadySwiped = true;
                 }
 
