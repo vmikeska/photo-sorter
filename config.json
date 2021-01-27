@@ -1,0 +1,22 @@
+{
+  "actions": [
+    {
+      "name": "YES",
+      "directory": "yes",
+      "direction": "RIGHT"
+    },
+    {
+      "name": "NO",
+      "directory": "no",
+      "direction": "LEFT"
+    },
+    {
+      "name": "Scarfs",
+      "directory": "scarfs"
+    },
+    {
+      "name": "Test",
+      "directory": "test"
+    }
+  ]
+}

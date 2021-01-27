@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:photo_sorter"
         mc:Ignorable="d"
+        AllowDrop="True"
         Title="MainWindow" Height="450" Width="800">
-    <Grid ShowGridLines="True">
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -23,15 +24,17 @@
             />
 
         <StackPanel 
+            x:Name="ActionsPanel"
             Grid.Row="0" 
             Grid.Column="1"
             >
-            <Button Click="openDialogClick">Load directory</Button>
-            <Button Click="backClick">Back</Button>
-            <Button Click="nextClick">Next</Button>
+            <Button Click="openDialogClick" Margin="5,5,5,10" FontSize="25">Load directory</Button>
+            <Button Click="backClick" Margin="5,5,5,10" FontSize="25">Back</Button>
+            <Button Click="nextClick" Margin="5,5,5,20" FontSize="25">Next</Button>
 
-            <Button Click="yesClick">YES</Button>
-            <Button Click="noClick">NO</Button>
+            
+
+            
         </StackPanel>
 
     </Grid>
