@@ -118,7 +118,7 @@ namespace photo_sorter
             AlreadySwiped = false;
         }
 
-        private int Sensitivity = 50;
+        private int Sensitivity = 200;
 
         void BasePage_TouchMove(object sender, TouchEventArgs e)
         {
