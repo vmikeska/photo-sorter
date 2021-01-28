@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:photo_sorter"
         mc:Ignorable="d"
         AllowDrop="True"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Photo Sorter" Height="450" Width="800">
     <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="10*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="21*" />
+            <ColumnDefinition Width="182*"/>
+            <ColumnDefinition Width="61*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -19,7 +20,7 @@
 
         <Grid
             Grid.Row="0" 
-            Grid.Column="0"
+            Grid.Column="0" Grid.ColumnSpan="2"
             >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -32,14 +33,14 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="LblTop" Grid.Row="0" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            <TextBlock x:Name="LblBottom" Grid.Row="2" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
-            <TextBlock x:Name="LbLeft" Grid.Row="1" Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="LblTop" FontSize="20" Grid.Row="0" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock x:Name="LblBottom" FontSize="20" Grid.Row="2" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock x:Name="LbLeft" FontSize="20" Grid.Row="1" Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-90"></RotateTransform>
                 </TextBlock.LayoutTransform>
             </TextBlock>
-            <TextBlock x:Name="LblRight" Grid.Row="1" Grid.Column="2" Text="" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="LblRight" FontSize="20" Grid.Row="1" Grid.Column="2" Text="" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-90"></RotateTransform>
                 </TextBlock.LayoutTransform>
@@ -54,16 +55,16 @@
             />
 
         </Grid>
-        
-        
-        
+
+
+
 
         <StackPanel 
             x:Name="ActionsPanel"
             Grid.Row="0" 
-            Grid.Column="1"
+            Grid.Column="2"
             >
-            <TextBlock x:Name="PosInfo" Text="pos"></TextBlock>
+            <!--<TextBlock x:Name="PosInfo" Text="pos"></TextBlock>-->
 
             <Button Click="openDialogClick" Margin="5,5,5,10" FontSize="25" Style="{StaticResource btnBlue}">Load directory</Button>
             <Button Click="backClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Back</Button>
@@ -72,9 +73,9 @@
         </StackPanel>
 
     </Grid>
-  
-       
-      
+
+
+
 
 
 </Window>

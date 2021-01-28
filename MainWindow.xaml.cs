@@ -184,9 +184,7 @@ namespace photo_sorter
                 var xDiff = xCurrent - xStart;
                 var yDiff = yCurrent - yStart;
 
-                PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
-
-                //var anyDirectionThresholdReached = (Math.Abs(xDiff) > Sensitivity) | (Math.Abs(yDiff) > Sensitivity);
+                //PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
 
                 var xLeftReached = xDiff < -Sensitivity;
                 if (xLeftReached)
@@ -216,22 +214,8 @@ namespace photo_sorter
                     AlreadySwiped = true;
                 }
 
-
-                //if (Touch.Position.X > (TouchStart.Position.X + Sensitivity))
-                //{
-                //    direction = "RIGHT";
-                //    AlreadySwiped = true;
-                //}
-
-                //if (Touch.Position.X < (TouchStart.Position.X - Sensitivity))
-                //{
-                //    direction = "LEFT";
-                //    AlreadySwiped = true;
-                //}
-
                 if (direction != null)
                 {
-                    //MessageBox.Show(direction);
                     var action = Config.actions.First(i => i.direction == direction);
                     if (action != null)
                     {
