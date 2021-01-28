@@ -140,62 +140,62 @@ namespace photo_sorter
                 var xCurrent = Touch.Position.X;
                 var yCurrent = Touch.Position.Y;
 
-                var xDiff = xStart - xCurrent;
-                var yDiff = yStart - yCurrent;
+                var xDiff = xCurrent - xStart;
+                var yDiff = yCurrent - yStart;
 
                 PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
 
                 //var anyDirectionThresholdReached = (Math.Abs(xDiff) > Sensitivity) | (Math.Abs(yDiff) > Sensitivity);
 
-                //var xLeftReached = xDiff < Sensitivity;
-                //if (xLeftReached)
-                //{
-                //    direction = "LEFT";
-                //    AlreadySwiped = true;
-                //}
-
-                //var xRightReached = xDiff > Sensitivity;
-                //if (xRightReached)
-                //{
-                //    direction = "RIGHT";
-                //    AlreadySwiped = true;
-                //}
-
-                //var yTopReached = yDiff < Sensitivity;
-                //if (yTopReached)
-                //{
-                //    direction = "TOP";
-                //    AlreadySwiped = true;
-                //}
-
-                //var yBottomReached = yDiff > Sensitivity;
-                //if (yBottomReached)
-                //{
-                //    direction = "BOTTOM";
-                //    AlreadySwiped = true;
-                //}
-
-
-                if (Touch.Position.X > (TouchStart.Position.X + Sensitivity))
-                {
-                    direction = "RIGHT";
-                    AlreadySwiped = true;
-                }
-
-                if (Touch.Position.X < (TouchStart.Position.X - Sensitivity))
+                var xLeftReached = xDiff < -Sensitivity;
+                if (xLeftReached)
                 {
                     direction = "LEFT";
                     AlreadySwiped = true;
                 }
 
+                var xRightReached = xDiff > Sensitivity;
+                if (xRightReached)
+                {
+                    direction = "RIGHT";
+                    AlreadySwiped = true;
+                }
+
+                var yTopReached = yDiff < -Sensitivity;
+                if (yTopReached)
+                {
+                    direction = "TOP";
+                    AlreadySwiped = true;
+                }
+
+                var yBottomReached = yDiff > Sensitivity;
+                if (yBottomReached)
+                {
+                    direction = "BOTTOM";
+                    AlreadySwiped = true;
+                }
+
+
+                //if (Touch.Position.X > (TouchStart.Position.X + Sensitivity))
+                //{
+                //    direction = "RIGHT";
+                //    AlreadySwiped = true;
+                //}
+
+                //if (Touch.Position.X < (TouchStart.Position.X - Sensitivity))
+                //{
+                //    direction = "LEFT";
+                //    AlreadySwiped = true;
+                //}
+
                 if (direction != null)
                 {
-                    //MessageBox.Show(direction);
-                    var action = Config.actions.First(i => i.direction == direction);
-                    if (action != null)
-                    {
-                        MoveCurrentFile(action.directory);
-                    }
+                    MessageBox.Show(direction);
+                    //var action = Config.actions.First(i => i.direction == direction);
+                    //if (action != null)
+                    //{
+                    //    MoveCurrentFile(action.directory);
+                    //}
                 }
             }
 
