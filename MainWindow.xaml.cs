@@ -27,17 +27,18 @@ namespace photo_sorter
         public List<string> Files = new List<string>();
         public int CurrentImagePos = 0;
 
-        protected TouchPoint TouchStart;
-        private Boolean AlreadySwiped = false;
-
         private ConfigInt Config = null;
+
+        private string LastMovedFileOrigin = null;
+        private string LastMovedFileDestination = null;
+
+        private TouchEvents Touch = null;
 
         public MainWindow()
         {
             InitializeComponent();
-            this.TouchDown += new EventHandler<TouchEventArgs>(BasePage_TouchDown);
-            this.TouchUp += new EventHandler<TouchEventArgs>(BasePage_TouchUp);
-            this.TouchMove += new EventHandler<TouchEventArgs>(BasePage_TouchMove);
+
+            //Touch.DirectionSwipedEvent += Touch_DirectionSwipedEvent;
 
             this.Drop += MainWindow_Drop;
 
@@ -46,6 +47,16 @@ namespace photo_sorter
             InitButtons();
             InitLabels();
         }
+
+        private void Touch_DirectionSwipedEvent(object sender, string direction)
+        {
+            var action = Config.actions.First(i => i.direction == direction);
+            if (action != null)
+            {
+                MoveCurrentFile(action.directory);
+            }
+        }
+    
 
         private void MainWindow_Drop(object sender, DragEventArgs e)
         {
@@ -65,6 +76,23 @@ namespace photo_sorter
             }
         }
 
+        private void MoveBack_Click(object sender, RoutedEventArgs e)
+        {
+            MoveFileBack();
+        }
+
+        private void MoveFileBack()
+        {
+            File.Move(LastMovedFileDestination, LastMovedFileOrigin);
+
+            Files.Insert(CurrentImagePos, LastMovedFileOrigin);
+            LastMovedFileDestination = null;
+            LastMovedFileOrigin = null;
+            BtnMoveBack.IsEnabled = false;
+            ShowImageByPos(CurrentImagePos);
+        }
+
+      
         private void InitButtons()
         {            
             foreach(var action in Config.actions)
@@ -143,96 +171,14 @@ namespace photo_sorter
             }
         }
 
-        void BasePage_TouchDown(object sender, TouchEventArgs e)
-        {
-            TouchStart = e.GetTouchPoint(this);
-        }
+      
 
-        void BasePage_TouchUp(object sender, TouchEventArgs e)
-        {
-            AlreadySwiped = false;
-        }
-
-        private int Sensitivity
-        {
-            get
-            {
-                return Config.sensitivity;
-            }
-        }
-
-        void BasePage_TouchMove(object sender, TouchEventArgs e)
-        {
-
-            if (TouchStart == null)
-            {
-                return;
-            }
-
-            if (!AlreadySwiped)
-            {
-                var Touch = e.GetTouchPoint(this);
-
-                string direction = null;
-
-                var xStart = TouchStart.Position.X;
-                var yStart = TouchStart.Position.Y;
-
-                var xCurrent = Touch.Position.X;
-                var yCurrent = Touch.Position.Y;
-
-                var xDiff = xCurrent - xStart;
-                var yDiff = yCurrent - yStart;
-
-                //PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
-
-                var xLeftReached = xDiff < -Sensitivity;
-                if (xLeftReached)
-                {
-                    direction = "LEFT";
-                    AlreadySwiped = true;
-                }
-
-                var xRightReached = xDiff > Sensitivity;
-                if (xRightReached)
-                {
-                    direction = "RIGHT";
-                    AlreadySwiped = true;
-                }
-
-                var yTopReached = yDiff < -Sensitivity;
-                if (yTopReached)
-                {
-                    direction = "TOP";
-                    AlreadySwiped = true;
-                }
-
-                var yBottomReached = yDiff > Sensitivity;
-                if (yBottomReached)
-                {
-                    direction = "BOTTOM";
-                    AlreadySwiped = true;
-                }
-
-                if (direction != null)
-                {
-                    var action = Config.actions.First(i => i.direction == direction);
-                    if (action != null)
-                    {
-                        MoveCurrentFile(action.directory);
-                    }
-                }
-            }
-
-            e.Handled = true;
-        }
-
-        public void openDialogClick(object sender, RoutedEventArgs e)
+        private void OpenDialogClick(object sender, RoutedEventArgs e)
         {
             OpenDirectoryDialog();
         }
 
-        public void nextClick(object sender, RoutedEventArgs e)
+        private void NextClick(object sender, RoutedEventArgs e)
         {
             var isLastPos = CurrentImagePos >= Files.Count() - 1;
             if (isLastPos)
@@ -245,7 +191,7 @@ namespace photo_sorter
             CurrentImagePos = nextPos;
         }
 
-        public void backClick(object sender, RoutedEventArgs e)
+        private void BackClick(object sender, RoutedEventArgs e)
         {
             if (CurrentImagePos == 0)
             {
@@ -305,6 +251,8 @@ namespace photo_sorter
             }
         }
 
+        
+
         private void MoveFile(string fullFile, string newDir)
         {
             var fileName = System.IO.Path.GetFileName(fullFile);
@@ -319,6 +267,108 @@ namespace photo_sorter
             }
            
             File.Move(fullFile, newFilePath);
+            
+            LastMovedFileDestination = newFilePath;
+            LastMovedFileOrigin = fullFile;
+            BtnMoveBack.IsEnabled = true;
         }
+    }
+}
+
+public class TouchEvents
+{
+    private Boolean AlreadySwiped = false;
+    private TouchPoint TouchStart;
+    private photo_sorter.MainWindow Win;
+    private ConfigInt Config;
+
+    public event EventHandler<string> DirectionSwipedEvent;
+
+    public TouchEvents(photo_sorter.MainWindow win, ConfigInt config)
+    {
+        Win = win;
+        Config = config;
+        win.TouchDown += new EventHandler<TouchEventArgs>(BasePage_TouchDown);
+        win.TouchUp += new EventHandler<TouchEventArgs>(BasePage_TouchUp);
+        win.TouchMove += new EventHandler<TouchEventArgs>(BasePage_TouchMove);
+        
+    }
+
+    void BasePage_TouchDown(object sender, TouchEventArgs e)
+    {
+        TouchStart = e.GetTouchPoint(Win);
+    }
+
+    void BasePage_TouchUp(object sender, TouchEventArgs e)
+    {
+        AlreadySwiped = false;
+    }
+
+    void BasePage_TouchMove(object sender, TouchEventArgs e)
+    {
+
+        if (TouchStart == null)
+        {
+            return;
+        }
+
+        if (!AlreadySwiped)
+        {
+            var Touch = e.GetTouchPoint(Win);
+
+            string direction = null;
+
+            var xStart = TouchStart.Position.X;
+            var yStart = TouchStart.Position.Y;
+
+            var xCurrent = Touch.Position.X;
+            var yCurrent = Touch.Position.Y;
+
+            var xDiff = xCurrent - xStart;
+            var yDiff = yCurrent - yStart;
+
+            //PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
+
+            var xLeftReached = xDiff < -Config.sensitivity;
+            if (xLeftReached)
+            {
+                direction = "LEFT";
+                AlreadySwiped = true;
+            }
+
+            var xRightReached = xDiff > Config.sensitivity;
+            if (xRightReached)
+            {
+                direction = "RIGHT";
+                AlreadySwiped = true;
+            }
+
+            var yTopReached = yDiff < -Config.sensitivity;
+            if (yTopReached)
+            {
+                direction = "TOP";
+                AlreadySwiped = true;
+            }
+
+            var yBottomReached = yDiff > Config.sensitivity;
+            if (yBottomReached)
+            {
+                direction = "BOTTOM";
+                AlreadySwiped = true;
+            }
+
+            if (direction != null)
+            {
+                DirectionSwipedEvent.Invoke(Win, direction);
+
+                //var action = Config.actions.First(i => i.direction == direction);
+                //if (action != null)
+                    
+                //    MoveCurrentFile(action.directory);
+                //}
+            }
+        }
+
+        e.Handled = true;
     }
 }
