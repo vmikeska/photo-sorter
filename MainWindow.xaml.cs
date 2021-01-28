@@ -143,6 +143,8 @@ namespace photo_sorter
                 var xDiff = xStart - xCurrent;
                 var yDiff = yStart - yCurrent;
 
+                PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
+
                 //var anyDirectionThresholdReached = (Math.Abs(xDiff) > Sensitivity) | (Math.Abs(yDiff) > Sensitivity);
 
                 //var xLeftReached = xDiff < Sensitivity;
