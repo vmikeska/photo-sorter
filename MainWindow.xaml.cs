@@ -38,11 +38,12 @@ namespace photo_sorter
         {
             InitializeComponent();
 
-            //Touch.DirectionSwipedEvent += Touch_DirectionSwipedEvent;
-
             this.Drop += MainWindow_Drop;
 
             LoadConfig();
+
+            Touch = new TouchEvents(this, Config);
+            Touch.DirectionSwipedEvent += Touch_DirectionSwipedEvent;
 
             InitButtons();
             InitLabels();
