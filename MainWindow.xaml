@@ -68,6 +68,7 @@
             <Button Click="OpenDialogClick" Margin="5,5,5,10" FontSize="25" Style="{StaticResource btnBlue}">Load directory</Button>
             <Button Click="BackClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Back</Button>
             <Button Click="NextClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Next</Button>
+            <Button Click="DeleteClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Delete</Button>
             <Button x:Name="BtnMoveBack" Click="MoveBack_Click" Margin="5,5,5,30" IsEnabled="False" FontSize="25" Style="{StaticResource btnBlue}">Move Back</Button>
 
         </StackPanel>

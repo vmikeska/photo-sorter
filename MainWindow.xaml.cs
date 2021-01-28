@@ -18,9 +18,7 @@ using photo_sorter.ints;
 
 namespace photo_sorter
 {
-    /// <summary>
-    /// Interakční logika pro MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window
     {
         public string Dir = "";
@@ -32,7 +30,7 @@ namespace photo_sorter
         private string LastMovedFileOrigin = null;
         private string LastMovedFileDestination = null;
 
-        private TouchEvents Touch = null;
+        private TouchEvents Touch;
 
         public MainWindow()
         {
@@ -204,6 +202,28 @@ namespace photo_sorter
             CurrentImagePos = prevPos;
         }
 
+        private void DeleteClick(object sender, RoutedEventArgs e)
+        {
+            if (Files.Count() == 0)
+            {
+                return;
+            }
+
+            var currentFile = Files[CurrentImagePos];
+            File.Delete(currentFile);
+            Files.Remove(currentFile);
+
+            if (Files.Count() > 0)
+            {
+                ShowImageByPos(CurrentImagePos);
+            }
+            else
+            {
+                MainImage.Source = null;
+            }
+
+        }
+
         private void ShowImageByPos(int pos)
         {
             var fileName = Files[pos];
@@ -361,12 +381,6 @@ public class TouchEvents
             if (direction != null)
             {
                 DirectionSwipedEvent.Invoke(Win, direction);
-
-                //var action = Config.actions.First(i => i.direction == direction);
-                //if (action != null)
-                    
-                //    MoveCurrentFile(action.directory);
-                //}
             }
         }
 
