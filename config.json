@@ -12,11 +12,13 @@
     },
     {
       "name": "Scarfs",
-      "directory": "scarfs"
+      "directory": "scarfs",
+      "direction": "TOP"
     },
     {
       "name": "Test",
-      "directory": "test"
+      "directory": "test",
+      "direction": "BOTTOM"
     }
   ]
 }

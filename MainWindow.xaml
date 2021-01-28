@@ -28,15 +28,12 @@
             Grid.Row="0" 
             Grid.Column="1"
             >
+            <TextBlock x:Name="PosInfo" Text="pos"></TextBlock>
+            
             <Button Click="openDialogClick" Margin="5,5,5,10" FontSize="25">Load directory</Button>
             <Button Click="backClick" Margin="5,5,5,10" FontSize="25">Back</Button>
             <Button Click="nextClick" Margin="5,5,5,30" FontSize="25">Next</Button>
 
-            <TextBlock x:Name="PosInfo" Text="pos"></TextBlock>
-
-            
-
-            
         </StackPanel>
 
     </Grid>

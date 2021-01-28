@@ -190,12 +190,12 @@ namespace photo_sorter
 
                 if (direction != null)
                 {
-                    MessageBox.Show(direction);
-                    //var action = Config.actions.First(i => i.direction == direction);
-                    //if (action != null)
-                    //{
-                    //    MoveCurrentFile(action.directory);
-                    //}
+                    //MessageBox.Show(direction);
+                    var action = Config.actions.First(i => i.direction == direction);
+                    if (action != null)
+                    {
+                        MoveCurrentFile(action.directory);
+                    }
                 }
             }
 
