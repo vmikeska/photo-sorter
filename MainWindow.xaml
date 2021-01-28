@@ -15,12 +15,45 @@
         <Grid.RowDefinitions>
             <RowDefinition />
         </Grid.RowDefinitions>
+
+
+        <Grid
+            Grid.Row="0" 
+            Grid.Column="0"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="LblTop" Grid.Row="0" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock x:Name="LblBottom" Grid.Row="2" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock x:Name="LbLeft" Grid.Row="1" Grid.Column="0" Text="" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"></RotateTransform>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+            <TextBlock x:Name="LblRight" Grid.Row="1" Grid.Column="2" Text="" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"></RotateTransform>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
+        </Grid>
+        
+        
         <Image 
             x:Name="MainImage" 
             HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
-            Grid.Row="0" 
-            Grid.Column="0"
+            Grid.Row="1" 
+            Grid.Column="1"
             />
 
         <StackPanel 

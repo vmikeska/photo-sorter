@@ -8,6 +8,8 @@ namespace photo_sorter.ints
 {
     public class ConfigInt
     {
+        public int sensitivity { get; set; }
+
         public ButtonsInt[] actions { get; set; }
     }
 

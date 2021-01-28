@@ -44,6 +44,7 @@ namespace photo_sorter
             LoadConfig();
 
             InitButtons();
+            InitLabels();
         }
 
         private void MainWindow_Drop(object sender, DragEventArgs e)
@@ -55,7 +56,6 @@ namespace photo_sorter
                 LoadDir(dir);
             }
         }
-
              
         private void LoadConfig() {            
             using (StreamReader file = File.OpenText("config.json"))
@@ -77,6 +77,40 @@ namespace photo_sorter
                 btn.Click += ActionBtn_Click;
                 ActionsPanel.Children.Add(btn);
             }
+        }
+
+        private void InitLabels()
+        {
+            foreach (var action in Config.actions)
+            {
+                var control = getLabelByDirection(action.direction);
+                if (control != null)
+                {
+                    control.Text = action.name;
+                }
+            }
+        }
+
+        private TextBlock getLabelByDirection(string direction)
+        {
+            if (direction == "TOP")
+            {
+                return LblTop;
+            }
+            if (direction == "BOTTOM")
+            {
+                return LblBottom;
+            }
+            if (direction == "LEFT")
+            {
+                return LbLeft;
+            }
+            if (direction == "RIGHT")
+            {
+                return LblRight;
+            }
+
+            return null;
         }
 
         private void ActionBtn_Click(object sender, RoutedEventArgs e)
@@ -118,7 +152,13 @@ namespace photo_sorter
             AlreadySwiped = false;
         }
 
-        private int Sensitivity = 200;
+        private int Sensitivity
+        {
+            get
+            {
+                return Config.sensitivity;
+            }
+        }
 
         void BasePage_TouchMove(object sender, TouchEventArgs e)
         {
