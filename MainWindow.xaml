@@ -45,10 +45,7 @@
                 </TextBlock.LayoutTransform>
             </TextBlock>
 
-        </Grid>
-        
-        
-        <Image 
+            <Image 
             x:Name="MainImage" 
             HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
@@ -56,16 +53,21 @@
             Grid.Column="1"
             />
 
+        </Grid>
+        
+        
+        
+
         <StackPanel 
             x:Name="ActionsPanel"
             Grid.Row="0" 
             Grid.Column="1"
             >
             <TextBlock x:Name="PosInfo" Text="pos"></TextBlock>
-            
-            <Button Click="openDialogClick" Margin="5,5,5,10" FontSize="25">Load directory</Button>
-            <Button Click="backClick" Margin="5,5,5,10" FontSize="25">Back</Button>
-            <Button Click="nextClick" Margin="5,5,5,30" FontSize="25">Next</Button>
+
+            <Button Click="openDialogClick" Margin="5,5,5,10" FontSize="25" Style="{StaticResource btnBlue}">Load directory</Button>
+            <Button Click="backClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Back</Button>
+            <Button Click="nextClick" Margin="5,5,5,30" FontSize="25"  Style="{StaticResource btnBlue}">Next</Button>
 
         </StackPanel>
 

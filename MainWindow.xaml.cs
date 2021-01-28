@@ -75,6 +75,7 @@ namespace photo_sorter
                 btn.FontSize = 25;
                 btn.Margin = new Thickness(5,5,5,5);
                 btn.Click += ActionBtn_Click;
+                btn.Style = App.Current.Resources["btnBlue"] as Style;
                 ActionsPanel.Children.Add(btn);
             }
         }
