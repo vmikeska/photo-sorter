@@ -5,18 +5,17 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Style TargetType="Button" x:Key="btnBlue">
-            <Setter Property="Background" Value="#0F52BA"/>
-            <Setter Property="Foreground" Value="#fff"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#0080FF"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Margin" Value="5"/> 
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="5"
-                                BorderThickness="1"
+                        <Border Background="{TemplateBinding Background}"                                
+                                BorderThickness="2"
                                 Padding="5"
-                                BorderBrush="#fff">
+                                BorderBrush="#0080FF">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"> </ContentPresenter>
                         </Border>
                     </ControlTemplate>
@@ -25,14 +24,16 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#0080FF"/>
-                    <Setter Property="Foreground" Value="#fff"/>
+                    <Setter Property="Foreground" Value="#FFF"/>
                 </Trigger>
 
-                
-                <Trigger Property="IsEnabled" Value="False">
+
+                <!--<Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Background" Value="#FF2E2E2E"/>
-                    <Setter Property="Foreground" Value="Black"/>
-                </Trigger>
+                    <Setter Property="Foreground" Value="#FF2E2E2E"/>
+
+                  
+                </Trigger>-->
                 
             </Style.Triggers>
         </Style>

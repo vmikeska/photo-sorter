@@ -8,17 +8,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
 using photo_sorter.ints;
+using System.Windows.Input;
 
 namespace photo_sorter
 {
-    
+
     public partial class MainWindow : Window
     {
         public string Dir = "";
@@ -31,6 +31,11 @@ namespace photo_sorter
         private string LastMovedFileDestination = null;
 
         private TouchEvents Touch;
+
+        private List<string> ImageExts = new List<string>()
+        {
+            "png", "jpg", "jpeg", "bmp", "gif", "tif", "tiff"
+        };
 
         public MainWindow()
         {
@@ -45,6 +50,8 @@ namespace photo_sorter
 
             InitButtons();
             InitLabels();
+
+            MainVideo.UnloadedBehavior = MediaState.Manual;
         }
 
         private void Touch_DirectionSwipedEvent(object sender, string direction)
@@ -56,7 +63,6 @@ namespace photo_sorter
             }
         }
     
-
         private void MainWindow_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent("FileName"))
@@ -66,18 +72,68 @@ namespace photo_sorter
                 LoadDir(dir);
             }
         }
-             
-        private void LoadConfig() {            
+        
+        private void MoveBack_Click(object sender, RoutedEventArgs e)
+        {
+            MoveFileBack();
+        }
+
+        private void ActionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var action = btn.Tag as ButtonsInt;
+
+            MoveCurrentFile(action.directory);
+        }
+
+        private void OpenDialogClick(object sender, RoutedEventArgs e)
+        {
+            OpenDirectoryDialog();
+        }
+
+        private void NextClick(object sender, RoutedEventArgs e)
+        {
+            var isLastPos = CurrentImagePos >= Files.Count() - 1;
+            if (isLastPos)
+            {
+                return;
+            }
+
+            var nextPos = CurrentImagePos + 1;
+            ShowMediaByPos(nextPos);
+            CurrentImagePos = nextPos;
+        }
+
+        private void BackClick(object sender, RoutedEventArgs e)
+        {
+            if (CurrentImagePos == 0)
+            {
+                return;
+            }
+
+            var prevPos = CurrentImagePos - 1;
+            ShowMediaByPos(prevPos);
+            CurrentImagePos = prevPos;
+        }
+
+        private void DeleteClick(object sender, RoutedEventArgs e)
+        {
+            DeleteFile();
+        }
+
+        private void MainVideo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MainVideo.Position = new TimeSpan(0);
+            MainVideo.Play();
+        }
+
+        private void LoadConfig()
+        {
             using (StreamReader file = File.OpenText("config.json"))
             {
                 var serializer = new JsonSerializer();
                 Config = (ConfigInt)serializer.Deserialize(file, typeof(ConfigInt));
             }
-        }
-
-        private void MoveBack_Click(object sender, RoutedEventArgs e)
-        {
-            MoveFileBack();
         }
 
         private void MoveFileBack()
@@ -87,20 +143,19 @@ namespace photo_sorter
             Files.Insert(CurrentImagePos, LastMovedFileOrigin);
             LastMovedFileDestination = null;
             LastMovedFileOrigin = null;
-            BtnMoveBack.IsEnabled = false;
-            ShowImageByPos(CurrentImagePos);
+            BtnMoveBack.Visibility = Visibility.Hidden;
+            ShowMediaByPos(CurrentImagePos);
         }
 
-      
         private void InitButtons()
-        {            
-            foreach(var action in Config.actions)
+        {
+            foreach (var action in Config.actions)
             {
                 var btn = new Button();
                 btn.Content = action.name;
                 btn.Tag = action;
                 btn.FontSize = 25;
-                btn.Margin = new Thickness(5,5,5,5);
+                btn.Margin = new Thickness(5, 5, 5, 5);
                 btn.Click += ActionBtn_Click;
                 btn.Style = App.Current.Resources["btnBlue"] as Style;
                 ActionsPanel.Children.Add(btn);
@@ -141,20 +196,20 @@ namespace photo_sorter
             return null;
         }
 
-        private void ActionBtn_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = sender as Button;
-            var action = btn.Tag as ButtonsInt;
-
-            MoveCurrentFile(action.directory);
-        }
-
         private void MoveCurrentFile(string newDir)
         {
+            
             if (Files.Count() == 0)
             {
                 return;
             }
+
+            MainVideo.Visibility = Visibility.Hidden;
+            MainImage.Visibility = Visibility.Hidden;
+            //Preloader.Visibility = Visibility.Visible;
+
+            MainVideo.Stop();
+            MainVideo.Close();
 
             var currentFile = Files[CurrentImagePos];
             MoveFile(currentFile, newDir);
@@ -162,52 +217,23 @@ namespace photo_sorter
 
             if (Files.Count() > 0)
             {
-                ShowImageByPos(CurrentImagePos);
-            }       
+                ShowMediaByPos(CurrentImagePos);
+            }
             else
             {
-                MainImage.Source = null;
+                CloseMedia();
             }
+            //Preloader.Visibility = Visibility.Hidden;
         }
 
-      
-
-        private void OpenDialogClick(object sender, RoutedEventArgs e)
-        {
-            OpenDirectoryDialog();
-        }
-
-        private void NextClick(object sender, RoutedEventArgs e)
-        {
-            var isLastPos = CurrentImagePos >= Files.Count() - 1;
-            if (isLastPos)
-            {
-                return;
-            }
-
-            var nextPos = CurrentImagePos + 1;
-            ShowImageByPos(nextPos);
-            CurrentImagePos = nextPos;
-        }
-
-        private void BackClick(object sender, RoutedEventArgs e)
-        {
-            if (CurrentImagePos == 0)
-            {
-                return;
-            }
-
-            var prevPos = CurrentImagePos - 1;
-            ShowImageByPos(prevPos);
-            CurrentImagePos = prevPos;
-        }
-
-        private void DeleteClick(object sender, RoutedEventArgs e)
+        private void DeleteFile()
         {
             if (Files.Count() == 0)
             {
                 return;
             }
+
+            MainVideo.Close();
 
             var currentFile = Files[CurrentImagePos];
             File.Delete(currentFile);
@@ -215,22 +241,47 @@ namespace photo_sorter
 
             if (Files.Count() > 0)
             {
-                ShowImageByPos(CurrentImagePos);
+                ShowMediaByPos(CurrentImagePos);
             }
             else
             {
-                MainImage.Source = null;
-            }
-
+                CloseMedia();
+            }            
         }
 
-        private void ShowImageByPos(int pos)
+        private void ShowMediaByPos(int pos)
         {
             var fileName = Files[pos];
             var uri = new Uri(fileName);
 
-            var freeBmp = BitmapFromUri(uri);
-            MainImage.Source = freeBmp;
+            MainImage.Visibility = Visibility.Hidden;
+            MainVideo.Visibility = Visibility.Hidden;
+
+            var isImage = IsImage(fileName);
+            if (isImage)
+            {
+                MainImage.Visibility = Visibility.Visible;
+                var freeBmp = BitmapFromUri(uri);
+                MainImage.Source = freeBmp;                
+            }
+            else
+            {
+                MainVideo.Visibility = Visibility.Visible;
+                MainVideo.Source = uri;
+            }
+        }
+
+        private void CloseMedia()
+        {
+            MainImage.Source = null;
+            MainVideo.Close();
+        }
+
+        private Boolean IsImage(string path)
+        {
+            var ext = System.IO.Path.GetExtension(path).Replace(".", "");
+            var isImg = ImageExts.Contains(ext);
+            return isImg;
         }
 
         public ImageSource BitmapFromUri(Uri source)
@@ -267,13 +318,12 @@ namespace photo_sorter
 
             if (hasFiles)
             {
-                ShowImageByPos(0);
+                ShowMediaByPos(0);
                 CurrentImagePos = 0;
             }
         }
 
         
-
         private void MoveFile(string fullFile, string newDir)
         {
             var fileName = System.IO.Path.GetFileName(fullFile);
@@ -291,99 +341,9 @@ namespace photo_sorter
             
             LastMovedFileDestination = newFilePath;
             LastMovedFileOrigin = fullFile;
-            BtnMoveBack.IsEnabled = true;
+            BtnMoveBack.Visibility = Visibility.Visible;
         }
-    }
-}
 
-public class TouchEvents
-{
-    private Boolean AlreadySwiped = false;
-    private TouchPoint TouchStart;
-    private photo_sorter.MainWindow Win;
-    private ConfigInt Config;
-
-    public event EventHandler<string> DirectionSwipedEvent;
-
-    public TouchEvents(photo_sorter.MainWindow win, ConfigInt config)
-    {
-        Win = win;
-        Config = config;
-        win.TouchDown += new EventHandler<TouchEventArgs>(BasePage_TouchDown);
-        win.TouchUp += new EventHandler<TouchEventArgs>(BasePage_TouchUp);
-        win.TouchMove += new EventHandler<TouchEventArgs>(BasePage_TouchMove);
         
-    }
-
-    void BasePage_TouchDown(object sender, TouchEventArgs e)
-    {
-        TouchStart = e.GetTouchPoint(Win);
-    }
-
-    void BasePage_TouchUp(object sender, TouchEventArgs e)
-    {
-        AlreadySwiped = false;
-    }
-
-    void BasePage_TouchMove(object sender, TouchEventArgs e)
-    {
-
-        if (TouchStart == null)
-        {
-            return;
-        }
-
-        if (!AlreadySwiped)
-        {
-            var Touch = e.GetTouchPoint(Win);
-
-            string direction = null;
-
-            var xStart = TouchStart.Position.X;
-            var yStart = TouchStart.Position.Y;
-
-            var xCurrent = Touch.Position.X;
-            var yCurrent = Touch.Position.Y;
-
-            var xDiff = xCurrent - xStart;
-            var yDiff = yCurrent - yStart;
-
-            //PosInfo.Text = $"x: {xDiff}, y: {yDiff}";
-
-            var xLeftReached = xDiff < -Config.sensitivity;
-            if (xLeftReached)
-            {
-                direction = "LEFT";
-                AlreadySwiped = true;
-            }
-
-            var xRightReached = xDiff > Config.sensitivity;
-            if (xRightReached)
-            {
-                direction = "RIGHT";
-                AlreadySwiped = true;
-            }
-
-            var yTopReached = yDiff < -Config.sensitivity;
-            if (yTopReached)
-            {
-                direction = "TOP";
-                AlreadySwiped = true;
-            }
-
-            var yBottomReached = yDiff > Config.sensitivity;
-            if (yBottomReached)
-            {
-                direction = "BOTTOM";
-                AlreadySwiped = true;
-            }
-
-            if (direction != null)
-            {
-                DirectionSwipedEvent.Invoke(Win, direction);
-            }
-        }
-
-        e.Handled = true;
     }
 }

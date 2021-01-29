@@ -6,21 +6,22 @@
         xmlns:local="clr-namespace:photo_sorter"
         mc:Ignorable="d"
         AllowDrop="True"
-        Title="Photo Sorter" Height="450" Width="800">
+        Title="Photo Sorter" Height="500" Width="800" MinHeight="500" MinWidth="800">
     <Grid >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="21*" />
-            <ColumnDefinition Width="182*"/>
-            <ColumnDefinition Width="61*" />
+            <ColumnDefinition Width="10*" />
+            <ColumnDefinition Width="3*"/>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
 
         <Grid
             Grid.Row="0" 
-            Grid.Column="0" Grid.ColumnSpan="2"
+            Grid.Column="0"
             >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -47,36 +48,102 @@
             </TextBlock>
 
             <Image 
-            x:Name="MainImage" 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Grid.Row="1" 
-            Grid.Column="1"
+                x:Name="MainImage" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Row="1" 
+                Grid.Column="1"
             />
 
+            <!--<StackPanel
+                Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Height="30" Margin="12,8,163,37">
+                    <TextBlock Text="Volume" VerticalAlignment="Center"></TextBlock>
+                    <Slider Margin="2" Maximum="1" Minimum="0" Width="102" Value="{Binding Path=Volume, Mode=TwoWay, ElementName=media}"></Slider>
+                    <TextBlock Text="{Binding ElementName=media, Path=Volume, Mode=OneWay, StringFormat=0.00}" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="30" Margin="26,47,163,-2">
+                    <TextBlock Text="Seek" VerticalAlignment="Center"></TextBlock>
+                    <Slider Margin="2" Width="104" Name="sliderSeek" ></Slider>
+                    --><!--MouseLeftButtonUp="sliderSeek_MouseLeftButtonUp"--><!--
+                    <TextBlock Text="{Binding ElementName=sliderSeek, Path=Value, StringFormat=0}" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="30" Margin="266,8,12,37">
+                    <Button Name="Play" Content="Play" Margin="2"  />
+                    --><!--Click="Play_Click"--><!--
+                    <Button Name="Pause" Content="Pause" Margin="2"  />
+                    --><!--Click="Pause_Click"--><!--
+                    <Button Name="Stop" Content="Stop" Margin="2" />
+                    --><!--Click="Stop_Click"--><!--
+                </StackPanel>
+            </StackPanel>-->
+            <MediaElement x:Name="MainVideo"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Row="1" 
+                Grid.Column="1"
+                MouseDown="MainVideo_MouseDown"
+            />
+            <!--<StackPanel
+                x:Name="Preloader"
+                Background="Red"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Row="1" 
+                Grid.Column="1">
+            </StackPanel>-->
+
         </Grid>
-
-
-
 
         <StackPanel 
             x:Name="ActionsPanel"
             Grid.Row="0" 
-            Grid.Column="2"
+            Grid.Column="1"
             >
 
-            <Button Click="OpenDialogClick" Margin="5,5,5,10" FontSize="25" Style="{StaticResource btnBlue}">Load directory</Button>
-            <Button Click="BackClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Back</Button>
-            <Button Click="NextClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Next</Button>
-            <Button Click="DeleteClick" Margin="5,5,5,10" FontSize="25"  Style="{StaticResource btnBlue}">Delete</Button>
-            <Button x:Name="BtnMoveBack" Click="MoveBack_Click" Margin="5,5,5,30" IsEnabled="False" FontSize="25" Style="{StaticResource btnBlue}">Move Back</Button>
+            <Button Click="OpenDialogClick" Margin="5,5,5,10" Style="{StaticResource btnBlue}">Load directory</Button>
+            
 
         </StackPanel>
 
+        <Grid
+            Grid.Row="1" 
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            >
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*" />
+                <ColumnDefinition Width="10*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel
+                Grid.Row="0" 
+                Grid.Column="0"                
+                Orientation="Horizontal"            
+            >
+                <Button Click="DeleteClick" Width="180" Style="{StaticResource btnBlue}">Delete</Button>
+                <Button x:Name="BtnMoveBack" Click="MoveBack_Click" Width="180" Visibility="Hidden" Style="{StaticResource btnBlue}">Move Back</Button>
+
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="0" 
+                Grid.Column="1"                
+                Orientation="Horizontal" 
+                HorizontalAlignment="Right"
+            >
+                <Button Click="BackClick" Width="180" Style="{StaticResource btnBlue}">Back</Button>
+                <Button Click="NextClick" Width="180" Style="{StaticResource btnBlue}">Next</Button>
+            </StackPanel>
+
+        </Grid>
+
+        
+
     </Grid>
-
-
-
-
 
 </Window>
